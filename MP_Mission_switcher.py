@@ -3,7 +3,9 @@ import sys
 from shutil import copyfile
 
 
+print("debug", sys.argv)
 loc_game = str(sys.argv[1])
+mission2mp = int(sys.argv[2])
 
 loc_maps = loc_game+"Data\\Maps\\"
 loc_specs = loc_game+"Data\\Specs\\"
@@ -12,7 +14,6 @@ mp_map_filename = "multiplayer"
 
 map_file_extentions = [".dds", ".e4m", ".eft"]
 
-mission2mp = 0
 
 
 # TODO: Let user pick a mission (with names?)
@@ -38,6 +39,11 @@ mission_names = {0:"Restore MP",
                  19:"Catastrophic Accident At The Airport",
                  20:"Great One"
                  }
+
+if mission2mp == 0:
+	print("Restoring MP")
+else:
+	print("Turning mission", mission2mp, ":",mission_names[mission2mp], "into mp map" )
 
 mission_file_names = {0:"multiplayer.b",
                       1:"m01",
@@ -69,7 +75,7 @@ mission_file_names = {0:"multiplayer.b",
 # TODO: Backup the MP mission files
 for i in range(3):
     try:
-        os.rename(loc_maps+mp_map_filename+map_file_extentions[i], loc_maps+mp_map_filename+".b"+map_file_extentions[i] )
+        copyfile(loc_maps+mp_map_filename+map_file_extentions[i], loc_maps+mp_map_filename+".b"+map_file_extentions[i] )
     except FileNotFoundError:
         print("There is no multiplayer.x file to copy.")
     except FileExistsError:
