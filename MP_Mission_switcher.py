@@ -63,45 +63,54 @@ mission_file_names = {0:"multiplayer.b",
                       20:"m20"
                       };
 
-print("Which mission to use for MP?:",end="\n");
-for k,v in mission_names.items():
-    print(v);
-userinput = input();
-mission2mp = int(userinput);
 
 
-if mission2mp == 0:
-    print("Restoring MP");
-else:
-    print("Turning mission",mission_names[mission2mp], "into mp map" );
 
-    # TODO: Backup the MP mission files
-    print("Making backup of mp mission files if there is none");
 
+if __name__ == '__main__':
+
+    print("Which mission to use for MP?:",end="\n");
+    for k,v in mission_names.items():
+        print(v);
+    userinput = input();
+    mission2mp = int(userinput);
+
+
+    if mission2mp == 0:
+        print("Restoring MP");
+    else:
+        print("Turning mission",mission_names[mission2mp], "into mp map" );
+
+        # TODO: Backup the MP mission files
+        print("Making backup of mp mission files if there is none");
+
+        for i in range(3):
+            try:
+                copyfile(loc_maps + mp_map_filename + map_file_extentions[i],
+                         loc_maps + mp_map_filename + ".b" + map_file_extentions[i]);
+                print("backing up  " + loc_maps + mp_map_filename + map_file_extentions[i]);
+            except FileNotFoundError:
+                print("There is no multiplayer." + map_file_extentions[i] + " file to copy.");
+            except FileExistsError:
+                print("A backup of multiplayer." + map_file_extentions[i] + " already exists.");
+
+
+
+
+    # TODO: Copy and remane the mission files to MP mission files.
+    print("Copy and renaming ");
     for i in range(3):
-        try:
-            copyfile(loc_maps + mp_map_filename + map_file_extentions[i],
-                     loc_maps + mp_map_filename + ".b" + map_file_extentions[i]);
-            print("backing up  " + loc_maps + mp_map_filename + map_file_extentions[i]);
-        except FileNotFoundError:
-            print("There is no multiplayer." + map_file_extentions[i] + " file to copy.");
-        except FileExistsError:
-            print("A backup of multiplayer." + map_file_extentions[i] + " already exists.");
+        copyfile(loc_maps+mission_file_names[mission2mp]+map_file_extentions[i],loc_maps+mp_map_filename+map_file_extentions[i]);
 
 
+    # TODO: Replace the mission spec file with one that doesn't cause events (or an alternate file?)
+    #   TEMP: For now, go to data/specs/freplay_endless_mp.xml and disable all events
+    #   (replace all "<Enabled value = "1" />" with "<Enabled value = "0" />")
+    #   However, the amount of money you get is 'still an issue'
+    #   And the missions don't properly end
+
+    # TODO: Tell the user he's ready
+    print("Done?");
 
 
-# TODO: Copy and remane the mission files to MP mission files.
-print("Copy and renaming ");
-for i in range(3):
-    copyfile(loc_maps+mission_file_names[mission2mp]+map_file_extentions[i],loc_maps+mp_map_filename+map_file_extentions[i]);
-
-
-# TODO: Replace the mission spec file with one that doesn't cause events (or an alternate file?)
-
-
-# TODO: Tell the user he's ready
-print("Done?");
-
-
-# TODO: keep program running to put files back manually when done? Alternate option to reset files?
+    # TODO: keep program running to put files back manually when done? Alternate option to reset files?
